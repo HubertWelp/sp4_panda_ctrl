@@ -17,6 +17,9 @@ catkin_package(
     roscpp
     std_msgs
     geometry_msgs
+    tf2
+    tf2_ros
+    tf2_geometry_msgs
     moveit_ros_planning_interface
     moveit_core
     moveit_msgs
@@ -45,5 +48,14 @@ add_executable(coordinate_translator
 )
 
 target_link_libraries(coordinate_translator
+  ${catkin_LIBRARIES}
+)
+
+# Executable: coordinate_translator using TF
+add_executable(coordinate_translator_tf
+  src/coordinate_translator_tf.cpp
+)
+
+target_link_libraries(coordinate_translator_tf
   ${catkin_LIBRARIES}
 )
