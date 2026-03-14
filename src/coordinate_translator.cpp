@@ -65,6 +65,11 @@ private:
     out.pose.position.y = origin_y_m_ - x_m;
     out.pose.position.z = 0.0;
 
+    out.pose.orientation.x = msg->pose.orientation.x;
+    out.pose.orientation.y = msg->pose.orientation.y;
+    out.pose.orientation.z = msg->pose.orientation.z;
+    out.pose.orientation.w = msg->pose.orientation.w;
+
     ROS_INFO_STREAM_THROTTLE(0.2,
       "[coordinate_translator] img(mm)=(" << x_mm << "," << y_mm << ")"
       << " -> panda_link0(m)=(" << out.pose.position.x << "," << out.pose.position.y << ",0)");

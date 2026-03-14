@@ -24,10 +24,15 @@ void PandaCliController::sp4PoseCallback(const geometry_msgs::PoseStamped::Const
   job.pos.z = grap_z_;
 
   // TCP-Yaw aus Quaternion berechnen
+  ROS_INFO("[sp4PoseCallback] Received pose: position=(%.3f, %.3f, %.3f), orientation=(%.3f, %.3f, %.3f, %.3f)",
+           msg->pose.position.x, msg->pose.position.y, msg->pose.position.z,
+           msg->pose.orientation.x, msg->pose.orientation.y, msg->pose.orientation.z, msg->pose.orientation.w);
+
   const double angle_rad =
       std::atan2(msg->pose.orientation.z, msg->pose.orientation.w) * 2.0;
   job.tcp_yaw_deg = rad2deg(angle_rad);
-  job.has_tcp_yaw = false;  // Werte vom SP4_Bildverarbeiutungssystem passen nicht
+  ROS_INFO("[sp4PoseCallback] Calculated TCP yaw: %.1f deg", job.tcp_yaw_deg);
+  job.has_tcp_yaw = true;  // Werte vom SP4_Bildverarbeiutungssystem passen nicht
 
   // Objektbreite übernehmen (falls vorhanden, einmalig)
   {
@@ -35,8 +40,8 @@ void PandaCliController::sp4PoseCallback(const geometry_msgs::PoseStamped::Const
     if (has_object_width_)
     {
       job.width_mm = object_width_mm_;
-      job.has_width = false; // Werte vom SP4_Bildverarbeiutungssystem passen nicht
-      has_object_width_ = false;
+      job.has_width = true; // Werte vom SP4_Bildverarbeiutungssystem passen nicht
+ //     has_object_width_ = false;
     }
   }
 

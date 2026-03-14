@@ -16,7 +16,7 @@ public:
     ros::NodeHandle pnh("~");
 
     subscribed_topic_name_ = "/robot/pose";
-    published_topic_name_  = "/sweet_pose_translated_tf";
+    published_topic_name_  = "/sweet_pose_translated";
 
     // Ziel-Frame für den Panda-Controller
     pnh.param<std::string>("output_frame", output_frame_, std::string("panda_link0"));
@@ -29,11 +29,11 @@ public:
     pnh.param<std::string>("camera_frame",camera_frame_,"camera_color_optical_frame");
     pnh.param<double>("table_z",table_z_,0.0);
 
-    // camera intrinsics
-    pnh.param("fx", fx_, 607.0);
-    pnh.param("fy", fy_, 607.0);
-    pnh.param("cx", cx_, 319.5);
-    pnh.param("fx", cy_, 239.5);
+    // camera intrinsics (taken from /camera_info)
+    pnh.param("fx", fx_, 554.38);
+    pnh.param("fy", fy_, 554.38);
+    pnh.param("cx", cx_, 320.5);
+    pnh.param("fx", cy_, 240.5);
 
     sub_ = nh.subscribe(subscribed_topic_name_, 10, &SP4CoordinateTranslator::poseCallback, this);
     pub_ = nh.advertise<geometry_msgs::PoseStamped>(published_topic_name_, 10);
@@ -100,6 +100,11 @@ private:
       out.pose.position.x = p_w.x();
       out.pose.position.y = p_w.y();
       out.pose.position.z = p_w.z();
+
+      out.pose.orientation.x = msg->pose.orientation.x;
+      out.pose.orientation.y = msg->pose.orientation.y;
+      out.pose.orientation.z = msg->pose.orientation.z;
+      out.pose.orientation.w = msg->pose.orientation.w;
 
       pub_.publish(out);
 

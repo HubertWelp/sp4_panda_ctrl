@@ -131,6 +131,7 @@ void PandaCliController::closeGripper()
 
 void PandaCliController::closeGripperWithWidth(double width_mm)
 {
+
   // Ziel-Spaltmaß aus Objektbreite
   const double object_width_m = width_mm / 1000.0;
   const double target_gap = object_width_m;
@@ -356,6 +357,7 @@ void PandaCliController::pickRoutine(const PickJob& object_data)
   // Optional: TCP-Yaw
   if (object_data.has_tcp_yaw)
   {
+    ROS_INFO("[auto_pick] Applying TCP yaw to %.1f deg", object_data.tcp_yaw_deg);
     if (!setWristAngle(object_data.tcp_yaw_deg))
       ROS_WARN("[auto_pick] Failed to apply TCP yaw");
   }
@@ -374,11 +376,15 @@ void PandaCliController::pickRoutine(const PickJob& object_data)
     pick_running_ = false;
     return;
   }
-
   if (object_data.has_width)
+  {
     closeGripperWithWidth(object_data.width_mm);
-  else
-  closeGripperWithWidth(22.0); // Milyway und Snicker 22 Maoam 23
+    ROS_INFO("[pickRoutine] Closing gripper with width %.1f mm", object_data.width_mm);
+  }else
+  {
+    closeGripperWithWidth(22.0); // Milyway und Snicker 22 Maoam 23
+    ROS_WARN("[pickRoutine] Closing gripper with default width 22.0 mm");
+  }
 
   // 3) Hoch (LIN)
   if (!moveArmToPose(above_pose))
