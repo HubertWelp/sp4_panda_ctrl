@@ -48,8 +48,8 @@ PandaCliController::PandaCliController()
   arm_.setPlanningTime(20.0); // Längere Planungszeit für komplexe Bewegungen
 
   // Konservatives Scaling für stabile, reproduzierbare Bewegungen
-  arm_.setMaxVelocityScalingFactor(0.05);
-  arm_.setMaxAccelerationScalingFactor(0.05);
+  arm_.setMaxVelocityScalingFactor(0.15);
+  arm_.setMaxAccelerationScalingFactor(0.15);
 
   hand_.setMaxVelocityScalingFactor(0.1);
   hand_.setMaxAccelerationScalingFactor(0.1);

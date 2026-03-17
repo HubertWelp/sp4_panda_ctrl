@@ -12,7 +12,7 @@ public:
     ros::NodeHandle pnh("~");
 
     subscribed_topic_name_ = "/robot/pose";
-    published_topic_name_  = "/sweet_pose_translated";
+    published_topic_name_  = "/sweet_pose_translated2";
 
     // Ziel-Frame für den Panda-Controller
     pnh.param<std::string>("output_frame", output_frame_, std::string("panda_link0"));
@@ -32,7 +32,7 @@ public:
                     << " frame=" << output_frame_);
     ROS_INFO_STREAM("[coordinate_translator] vision origin (0,0) -> panda_link0 = ("
                     << origin_x_m_ << ", " << origin_y_m_ << ")");
-    ROS_INFO_STREAM("[coordinate_translator] mapping: X = origin_x + y_mm/1000, Y = origin_y - x_mm/1000");
+    ROS_INFO_STREAM("[coordinate_translator] mapping: X = origin_x - y_m, Y = origin_y - x_m");
   }
 
 private:
@@ -48,11 +48,11 @@ private:
   void poseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
   {
     // SP4-Bildverarbeitungsystem liefert x/y in mm relativ zu ihrem Ursprung (0,0).
-    const double x_mm = msg->pose.position.x;
-    const double y_mm = msg->pose.position.y;
+    const double x_m = msg->pose.position.x;
+    const double y_m = msg->pose.position.y;
 
-    const double x_m = x_mm * MM_TO_M;
-    const double y_m = y_mm * MM_TO_M;
+//    const double x_m = x_mm * MM_TO_M;
+//    const double y_m = y_mm * MM_TO_M;
 
     geometry_msgs::PoseStamped out;
     out.header = msg->header;
@@ -60,8 +60,8 @@ private:
 
     // Achsen-Zuordnung für diesen Aufbau:
     // - Vision y -> Robot X (vor/zurück)
-    // - Vision x -> Robot Y, gespiegelt (Vorzeichen -)
-    out.pose.position.x = origin_x_m_ + y_m;
+    // - Vision x -> Robot Y, (links/rechts)
+    out.pose.position.x = origin_x_m_ - y_m;
     out.pose.position.y = origin_y_m_ - x_m;
     out.pose.position.z = 0.0;
 
@@ -71,7 +71,7 @@ private:
     out.pose.orientation.w = msg->pose.orientation.w;
 
     ROS_INFO_STREAM_THROTTLE(0.2,
-      "[coordinate_translator] img(mm)=(" << x_mm << "," << y_mm << ")"
+      "[coordinate_translator] img(mm)=(" << x_m << "," << y_m << ")"
       << " -> panda_link0(m)=(" << out.pose.position.x << "," << out.pose.position.y << ",0)");
 
     pub_.publish(out);

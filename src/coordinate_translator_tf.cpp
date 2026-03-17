@@ -30,8 +30,10 @@ public:
     pnh.param<double>("table_z",table_z_,0.0);
 
     // camera intrinsics (taken from /camera_info)
-    pnh.param("fx", fx_, 554.38);
-    pnh.param("fy", fy_, 554.38);
+//    pnh.param("fx", fx_, 554.38);
+//    pnh.param("fy", fy_, 554.38);
+    pnh.param("fx", fx_, 607.38);
+    pnh.param("fy", fy_, 607.38);
     pnh.param("cx", cx_, 320.5);
     pnh.param("fx", cy_, 240.5);
 
@@ -53,8 +55,8 @@ private:
     // - dy= -220/480*v
 
     double u,v;
-    u=640/300*msg->pose.position.x;
-    v=-480/220*msg->pose.position.y; // SP4 changes y-direction
+    u=640/300*msg->pose.position.x*1000;
+    v=480/220*msg->pose.position.y*1000;
 
     // ray (object) direction in camera frame
     // I am not sure whether this is correct, since in RViz the axis showing down from
