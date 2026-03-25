@@ -263,7 +263,9 @@ bool PandaCliController::setWristAngle(double angle_deg)
   st->copyJointGroupPositions(jmg, joints);
 
   // Mapping/Clamp: gewünschter Winkel in zulässigen Bereich bringen
-  double target_deg = angle_deg;
+  // angle_deg bezieht sich auf die x-Achse des Kamerakoordinatensystems
+  // Bei 0° zeigt der TCP nach 40° bezogen auf die x-Achse des Kamerakoordinatensystems, bei 180° zeigt er nach -40°
+  double target_deg = angle_deg-40.0;
   if (target_deg < 0.0)
     target_deg += 180.0;
 
