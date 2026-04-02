@@ -48,8 +48,8 @@ PandaCliController::PandaCliController()
   arm_.setPlanningTime(20.0); // Längere Planungszeit für komplexe Bewegungen
 
   // Konservatives Scaling für stabile, reproduzierbare Bewegungen
-  arm_.setMaxVelocityScalingFactor(0.15);
-  arm_.setMaxAccelerationScalingFactor(0.15);
+  arm_.setMaxVelocityScalingFactor(0.08);
+  arm_.setMaxAccelerationScalingFactor(0.08);
 
   hand_.setMaxVelocityScalingFactor(0.1);
   hand_.setMaxAccelerationScalingFactor(0.1);
@@ -250,7 +250,7 @@ geometry_msgs::Pose PandaCliController::makePlacePose(int goalpose_id, bool abov
     pose.position.y = -0.6;
   }
 
-  pose.position.z = above ? hover_z_ : grap_z_;
+  pose.position.z = above ? hover_z_ : grap_z_+0.090;  // etwas über dem Tisch runterfallen lassen
   return pose;
 }
 
@@ -264,13 +264,15 @@ bool PandaCliController::setWristAngle(double angle_deg)
 
   // Mapping/Clamp: gewünschter Winkel in zulässigen Bereich bringen
   // angle_deg bezieht sich auf die x-Achse des Kamerakoordinatensystems
-  // Bei 0° zeigt der TCP nach 40° bezogen auf die x-Achse des Kamerakoordinatensystems, bei 180° zeigt er nach -40°
-  double target_deg = angle_deg-40.0;
-  if (target_deg < 0.0)
-    target_deg += 180.0;
+  // Bei 0° zeigt der TCP nach 43° bezogen auf die x-Achse des Kamerakoordinatensystems, bei 180° zeigt er nach -43°
+  if (angle_deg < 0) angle_deg+=180;
+  double target_deg = angle_deg-43.0;
+  
 
-  if (target_deg < 0.0)   target_deg = 0.0;
-  if (target_deg > 166.0) target_deg = 166.0;
+  if (target_deg < -43)   target_deg = -43;
+  if (target_deg > 137.0) target_deg = 137.0;
+
+  ROS_INFO("setWristleAngle:target_deg=%.3f", target_deg);
 
   joints[6] = deg2rad(target_deg);
 

@@ -12,7 +12,7 @@ public:
     ros::NodeHandle pnh("~");
 
     subscribed_topic_name_ = "/robot/pose";
-    published_topic_name_  = "/sweet_pose_translated2";
+    published_topic_name_  = "/sweet_pose_translated";
 
     // Ziel-Frame für den Panda-Controller
     pnh.param<std::string>("output_frame", output_frame_, std::string("panda_link0"));
