@@ -188,7 +188,7 @@ Das simulierte Kamerabild ist unter folgendem ROS-Topic verfügbar:
 Zuerst die Roboteranbindung starten:
 
 ```bash
-roslaunch panda_moveit_config franka_control.launch robot_ip:=172.16.0.2
+roslaunch sp4_panda_ctrl franka_control.launch robot_ip:=172.16.0.2
 ```
 Anschließend das Startskript ausführen:
 

@@ -12,14 +12,16 @@
 <include file="$(find panda_moveit_config)/launch/ros_controllers.launch" pass_all_args="true" />
   <!-- as well as MoveIt demo -->
 <include file="$(find panda_moveit_config)/launch/demo.launch" pass_all_args="true">
-  <!-- === Your application nodes === -->
-<node pkg="sp4_panda_ctrl" type="panda_cli_control" name="panda_cli_control" output="screen" respawn="false" />
-
-<node pkg="sp4_panda_ctrl" type="coordinate_translator" name="coordinate_translator" output="screen" respawn="false" />
     <!-- robot description is loaded by franka_control.launch -->
     <arg name="load_robot_description" value="false" />
     <!-- MoveItSimpleControllerManager provides ros_control's JointTrajectory controllers
          as well as GripperCommand actions -->
     <arg name="moveit_controller_manager" value="simple" />
-  </include>
+</include>
+
+  <!-- === Your application nodes === -->
+<!--
+  <node pkg="sp4_panda_ctrl" type="panda_cli_control" name="panda_cli_control" output="screen" respawn="false" />
+  <node pkg="sp4_panda_ctrl" type="coordinate_translator_tf" name="coordinate_translator" output="screen" respawn="false" />
+-->
 </launch>
