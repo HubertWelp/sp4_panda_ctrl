@@ -266,11 +266,12 @@ bool PandaCliController::setWristAngle(double angle_deg)
   // angle_deg bezieht sich auf die x-Achse des Kamerakoordinatensystems
   // Bei 0° zeigt der TCP nach 43° bezogen auf die x-Achse des Kamerakoordinatensystems, bei 180° zeigt er nach -43°
   if (angle_deg < 0) angle_deg+=180;
-  double target_deg = angle_deg-43.0;
-  
+  if (angle_deg >= 180) angle_deg-=180;
+  double target_deg = angle_deg-44.0;
 
-  if (target_deg < -43)   target_deg = -43;
-  if (target_deg > 137.0) target_deg = 137.0;
+
+  if (target_deg < -44)   target_deg = -44;
+  if (target_deg > 136.0) target_deg = 136.0;
 
   ROS_INFO("setWristleAngle:target_deg=%.3f", target_deg);
 
